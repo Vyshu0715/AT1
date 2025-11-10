@@ -4,6 +4,10 @@ import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import "./Login.css";
 
+// --- NEW LINE (Best Practice) ---
+// Use the environment variable for production, but fall back to localhost for local development
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+
 export default function Login() {
   const navigate = useNavigate();
 
@@ -27,15 +31,16 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:8080/api/auth/login", {
+      // --- MODIFIED LINE ---
+      // Use the API_BASE_URL variable instead of a hard-coded string
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         email: formData.email,
         password: formData.password,
-        profession: formData.profession, // 👈 send profession also
+        profession: formData.profession,
       });
 
       console.log("Login Response:", res.data);
 
-      // ✅ Save full user object in localStorage
       localStorage.setItem("user", JSON.stringify(res.data));
 
       alert(`Welcome ${res.data.name}!`);

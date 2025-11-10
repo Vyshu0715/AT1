@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Signup.css";
 
+// --- NEW LINE ---
+// Use the same base URL variable as your Login component
+// It uses your Render URL in production and localhost:8080 in development
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+
 export default function Signup() {
   const navigate = useNavigate();
 
@@ -48,11 +53,13 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      // 🌐 Backend endpoint — use proxy OR absolute URL
-      const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api/users";
-
+      // --- MODIFIED LINES ---
+      // We now use the API_BASE_URL and add the specific signup path.
+      // I am using '/api/users' because that is what you had in your original code.
+      // If your signup route is different (like /api/auth/signup), just change it here.
+      
       const res = await axios.post(
-        API_URL,
+        `${API_BASE_URL}/api/users`, // <-- This line is now fixed
         {
           name: formData.name,
           email: formData.email,
@@ -62,7 +69,7 @@ export default function Signup() {
         },
         {
           headers: { "Content-Type": "application/json" },
-          timeout: 10000, // 10s timeout in case backend isn't reachable
+          timeout: 10000,
         }
       );
 
